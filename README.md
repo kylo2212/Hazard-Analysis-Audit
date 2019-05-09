@@ -5,6 +5,6 @@ I wrote this file to audit a subtask that is part of an epic, story or defect in
 
 This audit first takes the details of a jira issue through use of REST api calls and checks to see if certain conditions are being met to pass the audit. The entire audit program ensures certain criteria are fulfilled during development projects and the abililty for the auditing to be an automatic program. 
 
-There are more detailed comments in the code file for what is going on in the audit and how. This was the chance to get to know regular expressions much better in the making of this file. 
+There are more detailed comments in the code file for what is going on in the audit and how. This was the chance to get to know regular expressions much better in the making of the hazardAnalysiscomplete function of the code starting line 224. 
 
 
