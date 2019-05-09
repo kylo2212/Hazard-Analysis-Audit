@@ -8,7 +8,7 @@ const DEFAULT_SUBTASK_FIELDS = require('../../const/jira2Fields.js').DEFAULT_SUB
 const JIRA2_FIELDS = require('../../const/jira2Fields.js').JIRA_FIELDS;
 const IGNORE_AUDIT_LABELS = auditHelpers.IGNORE_AUDIT_LABELS;
 
-const templateLink = "https://jira2.cerner.com/browse/MPAGESCORE-30188";
+const templateLink = `https://jira2.cerner.com/browse/MPAGESCORE-30188`;
 
 /**
  * This function runs all the required audits relating to the Hazard Analysis sub-task for an issue.
@@ -32,7 +32,7 @@ function runHazardAnalysisAudits(issue){
         // Any issue which was closed prior to April 22nd, 2019 will not be audited.  This was the beginning date for the enforcement of Hazards Analysis auditing, thus all issues resolved prior are grandfathered in.  IE audit will auto pass
         const resolutionDate = new Date(issue.fields[JIRA2_FIELDS.RESOLUTION_DATE]);
         if (resolutionDate < new Date("2019-04-22")) {
-            hazardAnalysisAuditDetails.auditPassing = true;             
+            hazardAnalysisAuditDetails.auditPassing = true;
             hazardAnalysisAuditDetails.auditDetails = `This audit is being ignored since the issue was resolved prior to the audit introduction date of April 22nd, 2019`;
 
             return resolve(hazardAnalysisAuditDetails);
@@ -226,7 +226,7 @@ function hazardAnalysisComplete(issue){
         const hazardAnalysisComplete = new AuditDetails("Hazard Analysis Completed", issue);
         const descriptionBody = issue.fields.description;
 
-        // These are the Regular Expressions used to check each line for the questions in the Hazard Analysis description field 
+        // These are the Regular Expressions used to check each line for the questions in the Hazard Analysis description field
         const financialRegex = new RegExp(/Financial\:\*?(.+?[>]?)\W*Legal\/Regulatory/gims);
         const legalRegex = new RegExp(/Legal\/Regulatory\:\*?(.+?[>]?)\W*Data Integrity/gims);
         const dataRegex = new RegExp(/Data Integrity\:\*?(.+?[>]?)\W*Patient Safety/gmis);
@@ -249,10 +249,10 @@ function hazardAnalysisComplete(issue){
             hazardAnalysisComplete.auditPassing = false;
             return resolve(hazardAnalysisComplete);
         }
-        else{       
-            // Here the description body is changed into a string from the initial array form. Next the matched regular expression for the question we are looking  
-            // for is stripped downto the answer portion or $1 which is group one of the regular expression (the yes/no template and the answer part) of the regexp is left. 
-            // Next the regular expression for the yes/no template is used to strip away that part and only the answer that was typed in should be left. 
+        else{
+            // Here the description body is changed into a string from the initial array form. Next the matched regular expression for the question we are looking
+            // for is stripped downto the answer portion or $1 which is group one of the regular expression (the yes/no template and the answer part) of the regexp is left.
+            // Next the regular expression for the yes/no template is used to strip away that part and only the answer that was typed in should be left.
             tempStr = tempStr.toString().replace(financialRegex, '$1').replace(yesNoRegex, "");
             // This uses the fillCheckRegex to check for any answer that should be left. If not answered then stops the audit here and fails.
             if (!fillCheckRegex.test(tempStr)){
@@ -263,7 +263,7 @@ function hazardAnalysisComplete(issue){
                 await jiraHelpers.postIssueAuditFailureComment(issue, hazardAnalysisComplete, true);
                 return resolve(hazardAnalysisComplete);
             }
-        }       
+        }
         // Reassign tempStr to find answer to legal/regulatory question in the description body. The answer will be in an array.
         tempStr = descriptionBody.match(legalRegex);
         // If there is nothing returned then it is not the right template or something was altered to the point it was not caught.
@@ -274,9 +274,9 @@ function hazardAnalysisComplete(issue){
             hazardAnalysisComplete.auditPassing = false;
             return resolve(hazardAnalysisComplete);
         }
-        else{    
-            // Here the description body is changed into a string from the initial array form. Next the matched regular expression for the question we are looking  
-            // for is stripped downto the answer portion or $1 which is group one of the regular expression (the yes/no template and the answer part) of the regexp is left. 
+        else{
+            // Here the description body is changed into a string from the initial array form. Next the matched regular expression for the question we are looking
+            // for is stripped downto the answer portion or $1 which is group one of the regular expression (the yes/no template and the answer part) of the regexp is left.
             // Next the regular expression for the yes/no template is used to strip away that part and only the answer that was typed in should be left.
             tempStr = tempStr.toString().replace(legalRegex, '$1').replace(yesNoRegex, "");
             // This uses the fillCheckRegex to check for any answer that should be left. If not answered then stops the audit here and fails.
@@ -300,8 +300,8 @@ function hazardAnalysisComplete(issue){
             return resolve(hazardAnalysisComplete);
         }
         else{
-            // Here the description body is changed into a string from the initial array form. Next the matched regular expression for the question we are looking  
-            // for is stripped downto the answer portion or $1 which is group one of the regular expression (the yes/no template and the answer part) of the regexp is left. 
+            // Here the description body is changed into a string from the initial array form. Next the matched regular expression for the question we are looking
+            // for is stripped downto the answer portion or $1 which is group one of the regular expression (the yes/no template and the answer part) of the regexp is left.
             // Next the regular expression for the yes/no template is used to strip away that part and only the answer that was typed in should be left.
             tempStr = tempStr.toString().replace(dataRegex, '$1').replace(yesNoRegex, "");
             // This uses the fillCheckRegex to check for any answer that should be left. If not answered then stops the audit here and fails.
@@ -325,8 +325,8 @@ function hazardAnalysisComplete(issue){
             return resolve(hazardAnalysisComplete);
         }
         else{
-            // Here the description body is changed into a string from the initial array form. Next the matched regular expression for the question we are looking  
-            // for is stripped downto the answer portion or $1 which is group one of the regular expression (the yes/no template and the answer part) of the regexp is left. 
+            // Here the description body is changed into a string from the initial array form. Next the matched regular expression for the question we are looking
+            // for is stripped downto the answer portion or $1 which is group one of the regular expression (the yes/no template and the answer part) of the regexp is left.
             // Next the regular expression for the yes/no template is used to strip away that part and only the answer that was typed in should be left.
             tempStr = tempStr.toString().replace(patientRegex, '$1').replace(yesNoRegex, "");
             // This uses the fillCheckRegex to check for any answer that should be left. If not answered then stops the audit here and fails.
@@ -345,15 +345,15 @@ function hazardAnalysisComplete(issue){
         if (tempStr === null) {
             // If null leads to the correct template to use for the Hazard Analysis
             hazardAnalysisComplete.auditDetails = `CyberSecurity/Information description does not match expected description for Hazard Analysis. You can copy the description directly from the Perform Hazard Analysis 
-            sub-task found in the Story and Defect template; please clone Jira stories from the [Story and Defect template|${templateLink}]`;
+            sub-task found in the Story and Defect template located here ${templateLink}`;
             hazardAnalysisComplete.auditPassing = false;
             return resolve(hazardAnalysisComplete);
         }
         else{
-            // Here the description body is changed into a string from the initial array form. Next the matched regular expression for the question we are looking  
-            // for is stripped downto the answer portion or $1 which is group one of the regular expression (the yes/no template and the answer part) of the regexp is left. 
+            // Here the description body is changed into a string from the initial array form. Next the matched regular expression for the question we are looking
+            // for is stripped downto the answer portion or $1 which is group one of the regular expression (the yes/no template and the answer part) of the regexp is left.
             // Next the regular expression for the yes/no template is used to strip away that part and only the answer that was typed in should be left.
-            // Since this was the last question on the form it captures to the end of the description body and an added step here is to strip away the last part of 
+            // Since this was the last question on the form it captures to the end of the description body and an added step here is to strip away the last part of
             // the template if it is there before stripping away the yes/no template part.
             tempStr = tempStr.toString().replace(cyberSecurityRegex, '$1').replace(new RegExp (/\**\s*Engineer.+/gims), "").replace(yesNoRegex, "");
             // This uses the fillCheckRegex to check for any answer that should be left. If not answered then stops the audit here and fails.
